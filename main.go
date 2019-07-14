@@ -21,7 +21,7 @@ func init() {
 }
 
 // Run server: go build -o app && ./app
-// Try requests: curl http://127.0.0.1:8000/hello/world
+// Try requests: curl http://127.0.0.1:8080/hello/world
 func main() {
 	log.Info("Initializing service...")
 
