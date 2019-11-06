@@ -1,4 +1,4 @@
-module github.com/krlv/micro-go
+module github.com/krlv/tiny-go
 
 go 1.12
 

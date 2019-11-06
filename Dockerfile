@@ -4,7 +4,7 @@
 FROM golang:1.12 as builder
 
 # Copy local code to the container image
-WORKDIR /go/src/github.com/krlv/micro-go
+WORKDIR /go/src/github.com/krlv/tiny-go
 COPY . .
 
 # Build the command inside the container
@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -v -o app
 FROM scratch
 
 # Copy the binary to the production image from the builder stage
-COPY --from=builder /go/src/github.com/krlv/micro-go/app /app
+COPY --from=builder /go/src/github.com/krlv/tiny-go/app /app
 
 # Expose web service port
 EXPOSE 8080
