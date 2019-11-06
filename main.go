@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	log "github.com/sirupsen/logrus"
@@ -29,6 +33,31 @@ func main() {
 	router.GET("/", index)
 	router.GET("/hello/:name", hello)
 
+	srv := &http.Server{Addr: ":8080", Handler: router}
+
+	idle := make(chan os.Signal, 1)
+	signal.Notify(idle, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+			// Error starting or closing listener:
+			log.Fatalf("HTTP server ListenAndServe: %v", err)
+		}
+	}()
 	log.Info("Service is up and running")
-	http.ListenAndServe(":8080", router)
+
+	<-idle
+	log.Info("Service stopping...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer func() {
+		// TODO: extra handling here
+		cancel()
+	}()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+
+	log.Info("Service stopped")
 }
