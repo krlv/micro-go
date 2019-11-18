@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIndexHandler(t *testing.T) {
+func Test_index(t *testing.T) {
 	router := httprouter.New()
 	router.GET("/", index)
 
@@ -32,14 +32,14 @@ func TestIndexHandler(t *testing.T) {
 	assert.Equal(t, "Welcome!\n", string(msg), "Error index response")
 }
 
-func TestHelloHandler(t *testing.T) {
+func Test_redirect(t *testing.T) {
 	router := httprouter.New()
-	router.GET("/hello/:name", hello)
+	router.GET("/:hash", redirect)
 
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	res, err := http.Get(server.URL + "/hello/test")
+	res, err := http.Get(server.URL + "/example")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,5 +51,5 @@ func TestHelloHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, "Hello, test!\n", string(msg), "Error hello response")
+	assert.Equal(t, "Redirecting to example\n", string(msg), "Error redirect response")
 }

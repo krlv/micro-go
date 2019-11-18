@@ -31,7 +31,7 @@ func main() {
 
 	router := httprouter.New()
 	router.GET("/", index)
-	router.GET("/hello/:name", hello)
+	router.GET("/:hash", redirect)
 
 	srv := &http.Server{Addr: ":8080", Handler: router}
 
