@@ -1,1 +1,1 @@
-# Microservice in Go
+# URL Shortener in Go
