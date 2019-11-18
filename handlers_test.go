@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIndexHandler(t *testing.T) {
@@ -28,13 +29,10 @@ func TestIndexHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := "Welcome!\n"
-	if expected != string(msg) {
-		t.Errorf("Erong index response '%s', expected '%s'", msg, expected)
-	}
+	assert.Equal(t, "Welcome!\n", string(msg), "Error index response")
 }
 
-func TestHellpHandler(t *testing.T) {
+func TestHelloHandler(t *testing.T) {
 	router := httprouter.New()
 	router.GET("/hello/:name", hello)
 
@@ -53,8 +51,5 @@ func TestHellpHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := "Hello, test!\n"
-	if expected != string(msg) {
-		t.Errorf("Erong index response '%s', expected '%s'", msg, expected)
-	}
+	assert.Equal(t, "Hello, test!\n", string(msg), "Error hello response")
 }
